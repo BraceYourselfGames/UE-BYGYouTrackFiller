@@ -7,7 +7,7 @@
 #include "BYGYouTrackFiller.generated.h"
 
 UCLASS()
-class UBYGYouTrackFiller : public UObject
+class BYGYOUTRACKFILLER_API UBYGYouTrackFiller : public UObject
 {
 	GENERATED_BODY()
 public:

@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Modules/ModuleManager.h"
 
-class FBYGYouTrackFillerModule : public IModuleInterface
+class FBYGYouTrackFillerEditorModule : public IModuleInterface
 {
 public:
 
@@ -13,4 +13,15 @@ public:
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
 	
+	/** This function will be bound to Command. */
+	void PluginButtonClicked();
+	
+private:
+	bool HandleSettingsSaved();
+
+	void RegisterMenus();
+
+
+private:
+	TSharedPtr<class FUICommandList> PluginCommands;
 };

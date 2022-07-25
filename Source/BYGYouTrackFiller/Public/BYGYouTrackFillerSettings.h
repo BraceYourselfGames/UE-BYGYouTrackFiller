@@ -30,9 +30,8 @@ public:
 	}
 };
 
-// TODO You really don't want this shit included in your shipping builds
-UCLASS(config = "BYGYouTrackFiller", defaultconfig) //, AutoExpandCategories = "Validation" )
-class UBYGYouTrackFillerSettings : public UObject
+UCLASS(config = "BYGYouTrackFiller", defaultconfig)
+class BYGYOUTRACKFILLER_API UBYGYouTrackFillerSettings : public UObject
 {
 	GENERATED_BODY()
 

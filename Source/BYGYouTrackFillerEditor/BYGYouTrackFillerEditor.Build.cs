@@ -2,9 +2,9 @@
 
 using UnrealBuildTool;
 
-public class BYGYouTrackFiller : ModuleRules
+public class BYGYouTrackFillerEditor : ModuleRules
 {
-	public BYGYouTrackFiller(ReadOnlyTargetRules Target) : base(Target)
+	public BYGYouTrackFillerEditor(ReadOnlyTargetRules Target) : base(Target)
 	{
 		PCHUsage = ModuleRules.PCHUsageMode.UseExplicitOrSharedPCHs;
 		
@@ -38,8 +38,12 @@ public class BYGYouTrackFiller : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-				"HTTP",
-				//"Projects",
+				//"HTTP",
+				"InputCore",
+				//"EditorFramework",
+				"Projects",
+				"ToolMenus",
+				"BYGYouTrackFiller"
 				
 				// ... add private dependencies that you statically link with here ...	
 			}
