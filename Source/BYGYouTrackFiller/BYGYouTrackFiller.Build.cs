@@ -38,7 +38,12 @@ public class BYGYouTrackFiller : ModuleRules
 				"Engine",
 				"Slate",
 				"SlateCore",
-				"Http"
+				"HTTP",
+				"InputCore",
+				//"EditorFramework",
+				"Projects",
+				"ToolMenus",
+				
 				// ... add private dependencies that you statically link with here ...	
 			}
 			);

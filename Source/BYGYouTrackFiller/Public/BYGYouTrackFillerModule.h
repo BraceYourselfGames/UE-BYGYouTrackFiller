@@ -12,4 +12,16 @@ public:
 	/** IModuleInterface implementation */
 	virtual void StartupModule() override;
 	virtual void ShutdownModule() override;
+	
+	/** This function will be bound to Command. */
+	void PluginButtonClicked();
+	
+private:
+	bool HandleSettingsSaved();
+
+	void RegisterMenus();
+
+
+private:
+	TSharedPtr<class FUICommandList> PluginCommands;
 };

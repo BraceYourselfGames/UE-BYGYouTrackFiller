@@ -2,7 +2,7 @@
 
 #include "BYGYouTrackFillerSettings.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN( LogBYGYouTrackFiller, Log, All );
+DECLARE_LOG_CATEGORY_EXTERN(LogBYGYouTrackFiller, Log, All);
 
 USTRUCT(BlueprintType)
 struct FBYGYouTrackTicketData
@@ -18,9 +18,9 @@ public:
 	// Search and replace {Description}
 	UPROPERTY(config, EditAnywhere, BlueprintReadWrite, meta=(InlineEditConditionToggle, PinHiddenByDefault))
 	bool bIncludeDescription;
-	UPROPERTY(config, EditAnywhere, BlueprintReadWrite, meta=(EditCondition="bIncludeDescription"))
+	UPROPERTY(config, EditAnywhere, BlueprintReadWrite, meta=(EditCondition="bIncludeDescription", MultiLine=true))
 	FString Description;
-	
+
 	UPROPERTY(config, EditAnywhere, BlueprintReadWrite)
 	TMap<FString, FString> CustomFields;
 
@@ -31,7 +31,7 @@ public:
 };
 
 // TODO You really don't want this shit included in your shipping builds
-UCLASS(config = Game, defaultconfig) //, AutoExpandCategories = "Validation" )
+UCLASS(config = "BYGYouTrackFiller", defaultconfig) //, AutoExpandCategories = "Validation" )
 class UBYGYouTrackFillerSettings : public UObject
 {
 	GENERATED_BODY()
@@ -43,29 +43,37 @@ public:
 	UPROPERTY(config, EditAnywhere, Category = "Settings")
 	FString YouTrackBaseURL = "https://yourcompany.myjetbrains.com/youtrack/newIssue";
 
+	UPROPERTY(config, EditAnywhere, Category = "On Submit")
+	bool bOpenLogDirectoryOnSubmit = true;
+
+	UPROPERTY(config, EditAnywhere, Category = "On Submit")
+	bool bOpenSavesDirectoryOnSubmit = true;
+
+	UPROPERTY(config, EditAnywhere, Category = "On Submit")
+	bool bOpenVisualLogDirectoryOnSubmit = false;
+
 	// Take a screenshot when the submit command is executed.
-	UPROPERTY(config, EditAnywhere, Category = "Settings")
-	bool bTakeScreenshotOnSubmit;
+	UPROPERTY(config, EditAnywhere, Category = "On Submit|Screenshots")
+	bool bTakeScreenshotOnSubmit = false;
 
-	UPROPERTY(config, EditAnywhere, Category = "Settings")
-	bool bOpenScreenshotFolderOnSubmit;
+	UPROPERTY(config, EditAnywhere, Category = "On Submit|Screenshots")
+	bool bOpenScreenshotFolderOnSubmit = false;
 
-	UPROPERTY(config, EditAnywhere, Category = "Settings")
-	bool bOpenLogDirectoryOnSubmit;
-
-	UPROPERTY(config, EditAnywhere, Category = "Settings")
-	bool bOpenSavesDirectoryOnSubmit;
-
-	UPROPERTY(config, EditAnywhere, Category = "Settings")
-	bool bOpenVisualLogDirectoryOnSubmit;
-
+	// Enable the cheat command in the console
 	UPROPERTY(config, EditAnywhere, meta=(InlineEditConditionToggle))
 	bool bEnableCheatConsoleCommand = true;
 	// Entering this into the cheat console to open a browser with your settings
-	UPROPERTY(config, EditAnywhere, Category = "Settings", meta=(EditCondition="bEnableCheatConsoleCommand"))
+	UPROPERTY(config, EditAnywhere, Category = "Activation", meta=(EditCondition="bEnableCheatConsoleCommand"))
 	FString CheatCommand = "youtrack";
+	
+	// Enable the cheat command in the console
+	UPROPERTY(config, EditAnywhere, Category="Activation", meta=(ConfigRestartRequired=true))
+	bool bShowEditorButton = true;
+
+	UPROPERTY(config, EditAnywhere, Category="Activation")
+	FInputChord EditorKeyboardShortcut;
 
 	// Unless overridden, these values will be added as defaults to all tickets
-	UPROPERTY(config, EditAnywhere, Category = "Tickets", meta = ( ShowOnlyInnerProperties ))
+	UPROPERTY(config, EditAnywhere, Category = "Ticket Defaults", meta = ( ShowOnlyInnerProperties ))
 	FBYGYouTrackTicketData DefaultTicketValues;
 };
