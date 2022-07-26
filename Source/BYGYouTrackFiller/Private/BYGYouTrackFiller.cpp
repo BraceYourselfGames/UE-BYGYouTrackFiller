@@ -13,6 +13,8 @@ FBYGYouTrackTicketData UBYGYouTrackFiller::Merge(const FBYGYouTrackTicketData& D
 {
 	FBYGYouTrackTicketData Merged = DefaultsData;
 
+	if (CustomData.bIncludeProject)
+		Merged.Project = CustomData.Project;
 	if (CustomData.bIncludeSummary)
 		Merged.Summary = CustomData.Summary;
 	if (CustomData.bIncludeDescription)
@@ -22,17 +24,22 @@ FBYGYouTrackTicketData UBYGYouTrackFiller::Merge(const FBYGYouTrackTicketData& D
 	{
 		Merged.CustomFields.Add(Pair.Key, Pair.Value);
 	}
+	
+	for (const auto& Pair : CustomData.TextReplacements)
+	{
+		Merged.TextReplacements.Add(Pair.Key, Pair.Value);
+	}
 
 	return Merged;
 }
 
-void UBYGYouTrackFiller::CreateTicket(const FBYGYouTrackTicketData& Data)
+bool UBYGYouTrackFiller::FillAndShowTicket(const FBYGYouTrackTicketData& Data, const TArray<FString>& OtherPathsToOpen)
 {
 	const UBYGYouTrackFillerSettings& Settings = *GetDefault<UBYGYouTrackFillerSettings>();
 
-	const FBYGYouTrackTicketData MergedData = Merge(Settings.DefaultTicketValues, Data);
+	FBYGYouTrackTicketData MergedData = Merge(Settings.DefaultTicketValues, Data);
 
-	TArray<FString> PathsToOpen;
+	TArray<FString> PathsToOpen = OtherPathsToOpen;
 
 	if (Settings.bTakeScreenshotOnSubmit)
 	{
@@ -50,10 +57,21 @@ void UBYGYouTrackFiller::CreateTicket(const FBYGYouTrackTicketData& Data)
 		PathsToOpen.Add(IFileManager::Get().ConvertToAbsolutePathForExternalAppForRead(FPlatformProcess::UserSettingsDir()));
 	}
 
+	for (const auto& Pair : MergedData.TextReplacements)
+	{
+		const FString Key = "{" + Pair.Key + "}";
+		MergedData.Description = MergedData.Description.Replace(*Key, *Pair.Value);
+	}
+	// TODO find {} that are *not* replaced and warn?
+
 	{
 		TArray<FString> Parts;
-		Parts.Add("summary=" + MergedData.Summary);
-		Parts.Add("description=" + MergedData.Description);
+		if (!MergedData.Project.IsEmpty())
+			Parts.Add("project=" + FPlatformHttp::UrlEncode(MergedData.Project));
+		if (!MergedData.Summary.IsEmpty())
+			Parts.Add("summary=" + FPlatformHttp::UrlEncode(MergedData.Summary));
+		if (!MergedData.Description.IsEmpty())
+			Parts.Add("description=" + FPlatformHttp::UrlEncode(MergedData.Description));
 
 		for (const auto& Pair : MergedData.CustomFields)
 		{
@@ -66,6 +84,7 @@ void UBYGYouTrackFiller::CreateTicket(const FBYGYouTrackTicketData& Data)
 		PathsToOpen.Add(URL);
 	}
 
+	bool bAllSucceeded = true;
 	for (const FString& Path : PathsToOpen)
 	{
 		UE_LOG(LogBYGYouTrackFiller, Verbose, TEXT("Opening path '%s'"), *Path);
@@ -76,6 +95,8 @@ void UBYGYouTrackFiller::CreateTicket(const FBYGYouTrackTicketData& Data)
 		else
 		{
 			UE_LOG(LogBYGYouTrackFiller, Warning, TEXT("Failed to open path '%s'"), *Path);
+			bAllSucceeded = false;
 		}
 	}
+	return bAllSucceeded;
 }

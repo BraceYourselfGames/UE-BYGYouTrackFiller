@@ -1,15 +1,19 @@
 #include "BYGYouTrackFillerSettings.h"
 
+#include "BYGYouTrackFiller.h"
+
 DEFINE_LOG_CATEGORY(LogBYGYouTrackFiller);
 
 #define LOCTEXT_NAMESPACE "BUIEditorValidator"
 
 UBYGYouTrackFillerSettings::UBYGYouTrackFillerSettings(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
+	  , DefaultFillerClass(UBYGYouTrackFiller::StaticClass())
 {
 	DefaultTicketValues = FBYGYouTrackTicketData{
+		true, "YourProjectName",
 		false, "",
-		false, "",
+		true, "Please enter repro steps.",
 		{
 			{"assignee", "me"}
 		}

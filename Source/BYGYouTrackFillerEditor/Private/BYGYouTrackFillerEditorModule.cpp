@@ -9,6 +9,7 @@
 #include "ISettingsContainer.h"
 #include "BYGYouTrackFillerButtonStyle.h"
 #include "BYGYouTrackFillerButtonCommands.h"
+#include "BYGYouTrackFillerStatics.h"
 #include "Misc/MessageDialog.h"
 #include "ToolMenus.h"
 
@@ -42,12 +43,12 @@ void FBYGYouTrackFillerEditorModule::StartupModule()
 
 	FBYGYouTrackFillerButtonCommands::Register();
 	
+	const FBYGYouTrackFillerButtonCommands& Commands = FBYGYouTrackFillerButtonCommands::Get();
+	
 	PluginCommands = MakeShareable(new FUICommandList);
 
-	PluginCommands->MapAction(
-		FBYGYouTrackFillerButtonCommands::Get().PluginAction,
-		FExecuteAction::CreateRaw(this, &FBYGYouTrackFillerEditorModule::PluginButtonClicked),
-		FCanExecuteAction());
+	PluginCommands->MapAction( Commands.PluginAction, FExecuteAction::CreateRaw(this, &FBYGYouTrackFillerEditorModule::PluginButtonClicked));
+		//FCanExecuteAction());
 
 	const UBYGYouTrackFillerSettings& Settings = *GetDefault<UBYGYouTrackFillerSettings>();
 	if (Settings.bShowEditorButton)
@@ -94,15 +95,7 @@ bool FBYGYouTrackFillerEditorModule::HandleSettingsSaved()
 void FBYGYouTrackFillerEditorModule::PluginButtonClicked()
 {
 	FBYGYouTrackTicketData Data;
-	UBYGYouTrackFiller::CreateTicket(Data);
-	/*
-	FText DialogText = FText::Format(
-							LOCTEXT("PluginButtonDialogText", "Add code to {0} in {1} to override this button's actions"),
-							FText::FromString(TEXT("FBYGYouTrackFillerButtonModule::PluginButtonClicked()")),
-							FText::FromString(TEXT("BYGYouTrackFillerButton.cpp"))
-					   );
-	FMessageDialog::Open(EAppMsgType::Ok, DialogText);
-	*/
+	UBYGYouTrackFillerStatics::FillAndShowTicket(Data);
 }
 
 void FBYGYouTrackFillerEditorModule::RegisterMenus()

@@ -10,7 +10,9 @@ class FBYGYouTrackFillerButtonCommands : public TCommands<FBYGYouTrackFillerButt
 {
 public:
 	FBYGYouTrackFillerButtonCommands()
-		: TCommands<FBYGYouTrackFillerButtonCommands>(TEXT("BYGYouTrackFillerButton"), NSLOCTEXT("Contexts", "BYGYouTrackFillerButton", "BYGYouTrackFillerButton Plugin"), NAME_None, FBYGYouTrackFillerButtonStyle::GetStyleSetName())
+		//: TCommands<FBYGYouTrackFillerButtonCommands>(TEXT("BYGYouTrackFillerButton"), NSLOCTEXT("Contexts", "BYGYouTrackFillerButton", "BYGYouTrackFillerButton Plugin"), NAME_None, FBYGYouTrackFillerButtonStyle::GetStyleSetName())
+		//: TCommands<FBYGYouTrackFillerButtonCommands>(TEXT("BYGYouTrackFillerButton"), NSLOCTEXT("Contexts", "BYGYouTrackFillerButton", "BYGYouTrackFillerButton Plugin"), "EditorViewport", FBYGYouTrackFillerButtonStyle::GetStyleSetName())
+		: TCommands<FBYGYouTrackFillerButtonCommands>(TEXT("BYGYouTrackFillerButton"), NSLOCTEXT("Contexts", "BYGYouTrackFillerButton", "BYGYouTrackFillerButton Plugin"), "EditorViewport", FBYGYouTrackFillerButtonStyle::GetStyleSetName())
 	{
 	}
 
