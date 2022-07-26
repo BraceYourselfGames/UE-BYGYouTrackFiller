@@ -11,6 +11,19 @@ Simplifies submitting tickets to YouTrack by pre-filling information and opening
 
 ## Usage
 
+### Blueprints
+
+Fill and Show Ticket function in Blueprints
+
+![](Resources/example-blueprint.jpg)
+
+### C++
+
+```c++
+FBYGYouTrackTicketData Data;
+// Set up any custom values
+bool bSuccess = UBYGYouTrackFillerStatics::FillAndShowTicket(Data);
+```
 
 ### Custom Values
 
