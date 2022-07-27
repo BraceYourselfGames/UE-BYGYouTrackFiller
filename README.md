@@ -4,10 +4,11 @@ Simplifies submitting tickets to YouTrack by pre-filling information and opening
 
 * Does not require or store authentication information. All operations are local to the user's computer.
 * Works in editor and non-shipping builds.
-* Set a default issue template and use text replacements to fill out useful info like .
+* Set a default issue template and use text replacements to fill out useful info.
 * Supports custom fields in your private YouTrack e.g. Priority.
 * Does not submit tickets, only pre-fills data.
 * Can use either Blueprints or C++.
+* YouTrack information automatically stripped from Shipping builds.
 
 ## Usage
 
@@ -80,7 +81,6 @@ Customizing behavior is typically done by subclassing `UBYGYouTrackFiller` and c
 
 ## Future Goals
 
-* Automatically strip .ini file from Shipping builds.
 * Fix keyboard shortcut not working for button.
 * Work out how to automatically add cheat shortcut from the plugin.
  

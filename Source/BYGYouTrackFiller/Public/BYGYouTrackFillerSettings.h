@@ -91,4 +91,11 @@ public:
 	// This class is used when clicking on the button in the editor. If you subclass it then change it to point to your subclass
 	UPROPERTY(config, EditAnywhere, Category = "Advanced")
 	TSubclassOf<class UBYGYouTrackFiller> DefaultFillerClass;
+
+	// It is very likely that you do not want your YouTrack server data to appear in ini files
+	// with your shipping game. Checking this will make sure that it is stripped from shipping builds.
+	// For more information see BYGYouTrackFillerEditorModule.cpp
+	UPROPERTY(config, EditAnywhere, Category="Advanced")
+	bool bAddYouTrackInfoToIniBlacklist = true;
+
 };

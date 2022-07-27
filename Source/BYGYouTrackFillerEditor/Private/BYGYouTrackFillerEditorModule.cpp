@@ -12,6 +12,7 @@
 #include "BYGYouTrackFillerStatics.h"
 #include "Misc/MessageDialog.h"
 #include "ToolMenus.h"
+#include "Settings/ProjectPackagingSettings.h"
 
 static const FName ExampleButtonTabName("ExampleButton");
 
@@ -54,6 +55,17 @@ void FBYGYouTrackFillerEditorModule::StartupModule()
 	if (Settings.bShowEditorButton)
 	{
 		UToolMenus::RegisterStartupCallback(FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FBYGYouTrackFillerEditorModule::RegisterMenus));
+	}
+
+	if (Settings.bAddYouTrackInfoToIniBlacklist)
+	{
+		UProjectPackagingSettings* PackagingSettings = GetMutableDefault<UProjectPackagingSettings>();
+		const FString Section = "/Script/BYGYouTrackFiller.BYGYouTrackFillerSettings";
+		if (!PackagingSettings->IniSectionBlacklist.Contains(Section))
+		{
+			PackagingSettings->IniSectionBlacklist.Add(Section);
+			const bool bSuccess = PackagingSettings->TryUpdateDefaultConfigFile();
+		}
 	}
 }
 
