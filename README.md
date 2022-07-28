@@ -12,9 +12,15 @@ Simplifies submitting tickets to YouTrack by pre-filling information and opening
 
 ## Usage
 
+### In-Editor
+
+Click the button in the editor to open a pre-filled ticket.
+
+![](Resources/editor-button.jpg)
+
 ### Blueprints
 
-Fill and Show Ticket function in Blueprints
+Fill and Show Ticket can be called from Blueprints.
 
 ![](Resources/example-blueprint.jpg)
 
@@ -22,25 +28,33 @@ Fill and Show Ticket function in Blueprints
 
 ```c++
 FBYGYouTrackTicketData Data;
-// Set up any custom values
+// Any instances of {ComputerName} in the ticket will be replaced
+Data.TextReplacements.Add("ComputerName", FPlatformProcess::ComputerName());
+
 bool bSuccess = UBYGYouTrackFillerStatics::FillAndShowTicket(Data);
 ```
 
-### Custom Values
+### Cheat Console
 
-How to find out the names of your custom values.
+By default the cheat console command is `youtrack`. This can be changed in the plugin settings.
+
+## Customization
+
+### Setting Custom Ticket Properties
+
+Your YouTrack may have custom properties for priority, category, severity etc. It is possible to set these using the
+Custom Fields property when calling Fill And Show Ticket. First you need to confirm the name of your custom properties:
 
 1. Click "New Ticket".
 2. In your new ticket, change values in the right-hand properties panel.
 3. Click "Generate issue template URL".
 4. Note the `c=Property` values, where `Property` is the name of your custom value field. e.g. `Assignee`.
-5. Add these custom values to your default settings or when submitting reports.
 
-Alternatively fill them in C++ or Blue
+You can now use these custom values on your default settings or when submitting reports via C++ or Blueprints.
 
 ### Templates
 
-The plugin will automatically replace any text wrapped with curly braces `{Example}`.
+The plugin will automatically replace any text wrapped with curly braces `{Example}`. This is only done for the Summary and Description fields.
 
 ```c++
 FBYGYouTrackTicketData Data;
@@ -52,35 +66,23 @@ Data.TextReplacements.Add("PerforceVersion", "82582");
 In the plugin settings, we set up this default Description.
 ```c++
 Current Map: {MapName}
-Perforce Checklist: {PerforceVersion}
 Game Version: {GameVersion}
+Perforce Checklist: {PerforceVersion}
 ```
 
-
-### Create a Cheat
-
-Add a cheat function to your `UCheatManager` subclass, e.g.
-
-```c++
-// MyCheatManager.h
-UFUNCTION(Exec)
-void OpenTicket();
-
-// MyCheatManager.cpp
-void UMyCheatManager::OpenTicket()
-{
-    // This will show YouTrack in a browser with ticket default values filled-in.
-    const FBYGYouTrackTicketData Data;
-    UBYGYouTrackFillerStatics::FillAndShowTicket(Data);
-}
+The resulting ticket would have this in the Description:
+```
+Current Map: Facing Worlds
+Game Version: 4.2
+Perforce Checklist: 82582
 ```
 
-## Customizing Behavior
+### C++ Behavior
 
-Customizing behavior is typically done by subclassing `UBYGYouTrackFiller` and changing the Plugin settings to use this new class as the default.
+Customizing other behavior is supported by subclassing `UBYGYouTrackFiller` and changing the Plugin settings to use
+this new class as the default.
+
 
 ## Future Goals
 
-* Fix keyboard shortcut not working for button.
-* Work out how to automatically add cheat shortcut from the plugin.
- 
+* Fix keyboard shortcut not working for in-editor button.

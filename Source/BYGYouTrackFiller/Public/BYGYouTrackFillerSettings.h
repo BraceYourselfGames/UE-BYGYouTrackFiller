@@ -11,18 +11,20 @@ struct FBYGYouTrackTicketData
 public:
 	UPROPERTY(config, EditAnywhere, BlueprintReadWrite, meta=(InlineEditConditionToggle, PinHiddenByDefault))
 	bool bIncludeProject = false;
+	// If Project is left blank, the draft ticket should be created for the user's default project
 	UPROPERTY(config, EditAnywhere, BlueprintReadWrite, meta=(EditCondition="bIncludeProject"))
 	FString Project;
-	
-	// https://mycompany.myjetbrains.com/youtrack/newIssue?project=MT&summary=boobee&description=bah&c=State%20Open&c=Type%20Bug&c=Discipline%20Programming&c=Priority%20Major&c=Planned%20Version%203%20-%20Tactical%20View&c=Assignee%20ben
+
 	UPROPERTY(config, EditAnywhere, BlueprintReadWrite, meta=(InlineEditConditionToggle, PinHiddenByDefault))
 	bool bIncludeSummary = false;
+	// The short title of the ticket 
 	UPROPERTY(config, EditAnywhere, BlueprintReadWrite, meta=(EditCondition="bIncludeSummary"))
 	FString Summary;
 
-	// Search and replace {Description}
 	UPROPERTY(config, EditAnywhere, BlueprintReadWrite, meta=(InlineEditConditionToggle, PinHiddenByDefault))
 	bool bIncludeDescription = false;
+	// The long text explaining the bug or issue. Can contain text replacement entries like {Version},
+	// see TextReplacements for more info.
 	UPROPERTY(config, EditAnywhere, BlueprintReadWrite, meta=(EditCondition="bIncludeDescription", MultiLine=true))
 	FString Description;
 
@@ -58,7 +60,7 @@ public:
 	bool bOpenLogDirectoryOnSubmit = true;
 
 	UPROPERTY(config, EditAnywhere, Category = "On Submit")
-	bool bOpenSavesDirectoryOnSubmit = true;
+	bool bOpenUserSettingsDirectoryOnSubmit = true;
 
 	UPROPERTY(config, EditAnywhere, Category = "On Submit")
 	bool bOpenVisualLogDirectoryOnSubmit = false;
@@ -67,20 +69,22 @@ public:
 	UPROPERTY(config, EditAnywhere, Category = "On Submit|Screenshots")
 	bool bTakeScreenshotOnSubmit = false;
 
+	// When opening YouTrack, also open the screenshot directory.
 	UPROPERTY(config, EditAnywhere, Category = "On Submit|Screenshots")
-	bool bOpenScreenshotFolderOnSubmit = false;
+	bool bOpenScreenshotDirectoryOnSubmit = false;
 
-	// Enable the cheat command in the console
-	UPROPERTY(config, EditAnywhere, meta=(InlineEditConditionToggle))
+	// Enable the cheat command in the console.
+	UPROPERTY(config, EditAnywhere, Category="Activation", meta=(InlineEditConditionToggle))
 	bool bEnableCheatConsoleCommand = true;
-	// Entering this into the cheat console to open a browser with your settings
+	// Entering this into the cheat console to open a browser with your settings.
 	UPROPERTY(config, EditAnywhere, Category = "Activation", meta=(EditCondition="bEnableCheatConsoleCommand"))
 	FString CheatCommand = "youtrack";
 	
-	// Enable the cheat command in the console
+	// Show the YouTrack button at the top of the editor window.
 	UPROPERTY(config, EditAnywhere, Category="Activation", meta=(ConfigRestartRequired=true))
 	bool bShowEditorButton = true;
 
+	// Global keyboard shortcut to activate the YouTrack button.
 	UPROPERTY(config, EditAnywhere, Category="Activation")
 	FInputChord EditorKeyboardShortcut;
 

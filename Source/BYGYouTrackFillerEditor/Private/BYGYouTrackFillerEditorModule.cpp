@@ -9,12 +9,11 @@
 #include "ISettingsContainer.h"
 #include "BYGYouTrackFillerButtonStyle.h"
 #include "BYGYouTrackFillerButtonCommands.h"
+#include "BYGYouTrackFillerModule.h"
 #include "BYGYouTrackFillerStatics.h"
 #include "Misc/MessageDialog.h"
 #include "ToolMenus.h"
 #include "Settings/ProjectPackagingSettings.h"
-
-static const FName ExampleButtonTabName("ExampleButton");
 
 #define LOCTEXT_NAMESPACE "FBYGYouTrackFillerEditorModule"
 
@@ -91,12 +90,21 @@ void FBYGYouTrackFillerEditorModule::ShutdownModule()
 bool FBYGYouTrackFillerEditorModule::HandleSettingsSaved()
 {
 	UBYGYouTrackFillerSettings* Settings = GetMutableDefault<UBYGYouTrackFillerSettings>();
-	bool ResaveSettings = false;
+	bool bResaveSettings = false;
 
 	FBYGYouTrackFillerButtonCommands::Register();
 	FBYGYouTrackFillerButtonCommands::Unregister();
 
-	if ( ResaveSettings )
+	FBYGYouTrackFillerModule::Get().RefreshCheats();
+
+	// Do not allow empty cheat string if enabled
+	if (Settings->bEnableCheatConsoleCommand && Settings->CheatCommand.IsEmpty())
+	{
+		Settings->CheatCommand = "youtrack";
+		bResaveSettings = true;
+	}
+
+	if ( bResaveSettings )
 	{
 		Settings->SaveConfig();
 	}
@@ -137,4 +145,4 @@ void FBYGYouTrackFillerEditorModule::RegisterMenus()
 
 #undef LOCTEXT_NAMESPACE
 
-IMPLEMENT_MODULE(FBYGYouTrackFillerEditorModule, BYGYouTrackFiller)
+IMPLEMENT_MODULE(FBYGYouTrackFillerEditorModule, BYGYouTrackFillerEditor)

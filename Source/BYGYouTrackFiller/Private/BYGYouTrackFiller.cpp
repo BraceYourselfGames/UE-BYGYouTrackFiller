@@ -42,12 +42,12 @@ bool UBYGYouTrackFiller::FillAndShowTicket(const FBYGYouTrackTicketData& Data, c
 		FScreenshotRequest::RequestScreenshot(RequestedScreenshotPath, true, true);
 	}
 
-	if (Settings.bOpenScreenshotFolderOnSubmit)
+	if (Settings.bOpenScreenshotDirectoryOnSubmit)
 	{
 		PathsToOpen.Add(IFileManager::Get().ConvertToAbsolutePathForExternalAppForRead(*FPaths::ScreenShotDir()));
 	}
 
-	if (Settings.bOpenSavesDirectoryOnSubmit)
+	if (Settings.bOpenUserSettingsDirectoryOnSubmit)
 	{
 		PathsToOpen.Add(IFileManager::Get().ConvertToAbsolutePathForExternalAppForRead(FPlatformProcess::UserSettingsDir()));
 	}
@@ -55,6 +55,7 @@ bool UBYGYouTrackFiller::FillAndShowTicket(const FBYGYouTrackTicketData& Data, c
 	for (const auto& Pair : MergedData.TextReplacements)
 	{
 		const FString Key = "{" + Pair.Key + "}";
+		MergedData.Summary = MergedData.Summary.Replace(*Key, *Pair.Value);
 		MergedData.Description = MergedData.Description.Replace(*Key, *Pair.Value);
 	}
 	// TODO find {} that are *not* replaced and warn?

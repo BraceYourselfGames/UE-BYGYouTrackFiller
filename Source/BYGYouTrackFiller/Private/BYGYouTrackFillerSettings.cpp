@@ -13,10 +13,10 @@ UBYGYouTrackFillerSettings::UBYGYouTrackFillerSettings(const FObjectInitializer&
 	DefaultTicketValues = FBYGYouTrackTicketData{
 		true, "YourProjectName",
 		false, "",
-		true, "Please enter repro steps.",
+		true, "Please enter repro steps.\nVersion: {Version}\nComputer Name: {ComputerName}",
 		{
 			{"assignee", "me"}
-		}
+		},
 	};
 }
 
