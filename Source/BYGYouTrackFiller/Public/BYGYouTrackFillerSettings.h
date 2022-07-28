@@ -2,7 +2,7 @@
 
 #include "BYGYouTrackFillerSettings.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogBYGYouTrackFiller, Log, All);
+BYGYOUTRACKFILLER_API DECLARE_LOG_CATEGORY_EXTERN(LogBYGYouTrackFiller, Log, All);
 
 USTRUCT(BlueprintType)
 struct FBYGYouTrackTicketData

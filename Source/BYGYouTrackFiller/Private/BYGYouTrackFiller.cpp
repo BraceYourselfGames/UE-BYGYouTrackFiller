@@ -1,13 +1,8 @@
 // Copyright Brace Yourself Games. All Rights Reserved.
 
 #include "BYGYouTrackFiller.h"
-
 #include "Misc/OutputDeviceNull.h"
 #include "PlatformHttp.h"
-
-// TODO Make cross-platform
-//#include "PlatformMisc.h"
-
 
 FBYGYouTrackTicketData UBYGYouTrackFiller::Merge(const FBYGYouTrackTicketData& DefaultsData, const FBYGYouTrackTicketData& CustomData)
 {
@@ -24,7 +19,7 @@ FBYGYouTrackTicketData UBYGYouTrackFiller::Merge(const FBYGYouTrackTicketData& D
 	{
 		Merged.CustomFields.Add(Pair.Key, Pair.Value);
 	}
-	
+
 	for (const auto& Pair : CustomData.TextReplacements)
 	{
 		Merged.TextReplacements.Add(Pair.Key, Pair.Value);

@@ -64,7 +64,10 @@ void FBYGYouTrackFillerEditorModule::StartupModule()
 		if (!PackagingSettings->IniSectionBlacklist.Contains(Section))
 		{
 			PackagingSettings->IniSectionBlacklist.Add(Section);
-			const bool bSuccess = PackagingSettings->TryUpdateDefaultConfigFile();
+			if (!PackagingSettings->TryUpdateDefaultConfigFile())
+			{
+				UE_LOG(LogBYGYouTrackFiller, Warning, TEXT("Failed to update config file to add '%s' to IniSectionBlacklist"), *Section);
+			}
 		}
 	}
 }
@@ -90,11 +93,8 @@ bool FBYGYouTrackFillerEditorModule::HandleSettingsSaved()
 	UBYGYouTrackFillerSettings* Settings = GetMutableDefault<UBYGYouTrackFillerSettings>();
 	bool ResaveSettings = false;
 
-	
 	FBYGYouTrackFillerButtonCommands::Register();
 	FBYGYouTrackFillerButtonCommands::Unregister();
-	// You can put any validation code in here and resave the settings in case an invalid
-	// value has been entered
 
 	if ( ResaveSettings )
 	{

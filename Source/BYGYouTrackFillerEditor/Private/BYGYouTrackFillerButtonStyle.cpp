@@ -42,7 +42,7 @@ TSharedRef< FSlateStyleSet > FBYGYouTrackFillerButtonStyle::Create()
 	TSharedRef< FSlateStyleSet > Style = MakeShareable(new FSlateStyleSet("BYGYouTrackFillerButtonStyle"));
 	Style->SetContentRoot(IPluginManager::Get().FindPlugin("BYGYouTrackFiller")->GetBaseDir() / TEXT("Resources"));
 
-	Style->Set("BYGYouTrackFillerButton.PluginAction", new IMAGE_BRUSH_SVG(TEXT("PlaceholderButtonIcon"), Icon20x20));
+	Style->Set("BYGYouTrackFillerButton.PluginAction", new IMAGE_BRUSH_SVG(TEXT("YouTrackFillerButtonIcon"), Icon20x20));
 	return Style;
 }
 
