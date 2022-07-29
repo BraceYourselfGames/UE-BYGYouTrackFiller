@@ -81,8 +81,3 @@ Perforce Checklist: 82582
 
 Customizing other behavior is supported by subclassing `UBYGYouTrackFiller` and changing the Plugin settings to use
 this new class as the default.
-
-
-## Future Goals
-
-* Fix keyboard shortcut not working for in-editor button.

@@ -85,7 +85,7 @@ public:
 	bool bShowEditorButton = true;
 
 	// Global keyboard shortcut to activate the YouTrack button.
-	UPROPERTY(config, EditAnywhere, Category="Activation")
+	UPROPERTY(config, EditAnywhere, Category="Activation", meta=(ConfigRestartRequired=true))
 	FInputChord EditorKeyboardShortcut;
 
 	// Unless overridden, these values will be added as defaults to all tickets

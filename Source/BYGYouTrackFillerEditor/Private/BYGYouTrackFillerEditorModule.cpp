@@ -7,10 +7,11 @@
 #include "ISettingsModule.h"
 #include "ISettingsSection.h"
 #include "ISettingsContainer.h"
-#include "BYGYouTrackFillerButtonStyle.h"
-#include "BYGYouTrackFillerButtonCommands.h"
+#include "BYGYouTrackFillerStyle.h"
+#include "BYGYouTrackFillerCommands.h"
 #include "BYGYouTrackFillerModule.h"
 #include "BYGYouTrackFillerStatics.h"
+#include "LevelEditor.h"
 #include "Misc/MessageDialog.h"
 #include "ToolMenus.h"
 #include "Settings/ProjectPackagingSettings.h"
@@ -34,28 +35,28 @@ void FBYGYouTrackFillerEditorModule::StartupModule()
 
 		if (SettingsSection.IsValid())
 		{
-			SettingsSection->OnModified().BindRaw( this, &FBYGYouTrackFillerEditorModule::HandleSettingsSaved );
+			SettingsSection->OnModified().BindRaw(this, &FBYGYouTrackFillerEditorModule::HandleSettingsSaved);
 		}
 	}
-	
-	FBYGYouTrackFillerButtonStyle::Initialize();
-	FBYGYouTrackFillerButtonStyle::ReloadTextures();
 
-	FBYGYouTrackFillerButtonCommands::Register();
-	
-	const FBYGYouTrackFillerButtonCommands& Commands = FBYGYouTrackFillerButtonCommands::Get();
-	
-	PluginCommands = MakeShareable(new FUICommandList);
+	FBYGYouTrackFillerStyle::Initialize();
+	FBYGYouTrackFillerStyle::ReloadTextures();
 
-	PluginCommands->MapAction( Commands.PluginAction, FExecuteAction::CreateRaw(this, &FBYGYouTrackFillerEditorModule::PluginButtonClicked));
-		//FCanExecuteAction());
+	FBYGYouTrackFillerCommands::Register();
+
+	const FBYGYouTrackFillerCommands& Commands = FBYGYouTrackFillerCommands::Get();
+
+	// Register level editor hooks and commands
+	FLevelEditorModule& LevelEditorModule = FModuleManager::Get().LoadModuleChecked<FLevelEditorModule>("LevelEditor");
+	TSharedRef<FUICommandList> CommandList = LevelEditorModule.GetGlobalLevelEditorActions();
+
+	CommandList->MapAction(Commands.FillAndShowYouTrack,
+	                          FExecuteAction::CreateRaw(this, &FBYGYouTrackFillerEditorModule::HandlePluginButtonExecute),
+	                          FCanExecuteAction::CreateRaw(this, &FBYGYouTrackFillerEditorModule::HandlerPluginButtonCanExecute));
+
+	UToolMenus::RegisterStartupCallback(FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FBYGYouTrackFillerEditorModule::RegisterMenus));
 
 	const UBYGYouTrackFillerSettings& Settings = *GetDefault<UBYGYouTrackFillerSettings>();
-	if (Settings.bShowEditorButton)
-	{
-		UToolMenus::RegisterStartupCallback(FSimpleMulticastDelegate::FDelegate::CreateRaw(this, &FBYGYouTrackFillerEditorModule::RegisterMenus));
-	}
-
 	if (Settings.bAddYouTrackInfoToIniBlacklist)
 	{
 		UProjectPackagingSettings* PackagingSettings = GetMutableDefault<UProjectPackagingSettings>();
@@ -77,14 +78,14 @@ void FBYGYouTrackFillerEditorModule::ShutdownModule()
 	{
 		SettingsModule->UnregisterSettings(ContainerName, CategoryName, SectionName);
 	}
-	
+
 	UToolMenus::UnRegisterStartupCallback(this);
 
 	UToolMenus::UnregisterOwner(this);
 
-	FBYGYouTrackFillerButtonStyle::Shutdown();
+	FBYGYouTrackFillerStyle::Shutdown();
 
-	FBYGYouTrackFillerButtonCommands::Unregister();
+	FBYGYouTrackFillerCommands::Unregister();
 }
 
 bool FBYGYouTrackFillerEditorModule::HandleSettingsSaved()
@@ -92,19 +93,19 @@ bool FBYGYouTrackFillerEditorModule::HandleSettingsSaved()
 	UBYGYouTrackFillerSettings* Settings = GetMutableDefault<UBYGYouTrackFillerSettings>();
 	bool bResaveSettings = false;
 
-	FBYGYouTrackFillerButtonCommands::Register();
-	FBYGYouTrackFillerButtonCommands::Unregister();
+	FBYGYouTrackFillerCommands::Register();
+	FBYGYouTrackFillerCommands::Unregister();
 
 	FBYGYouTrackFillerModule::Get().RefreshCheats();
 
 	// Do not allow empty cheat string if enabled
-	if (Settings->bEnableCheatConsoleCommand && Settings->CheatCommand.IsEmpty())
+	if (ensure(Settings) && Settings->bEnableCheatConsoleCommand && Settings->CheatCommand.IsEmpty())
 	{
 		Settings->CheatCommand = "youtrack";
 		bResaveSettings = true;
 	}
 
-	if ( bResaveSettings )
+	if (bResaveSettings)
 	{
 		Settings->SaveConfig();
 	}
@@ -112,10 +113,15 @@ bool FBYGYouTrackFillerEditorModule::HandleSettingsSaved()
 	return true;
 }
 
-void FBYGYouTrackFillerEditorModule::PluginButtonClicked()
+void FBYGYouTrackFillerEditorModule::HandlePluginButtonExecute()
 {
 	FBYGYouTrackTicketData Data;
 	UBYGYouTrackFillerStatics::FillAndShowTicket(Data);
+}
+
+bool FBYGYouTrackFillerEditorModule::HandlerPluginButtonCanExecute()
+{
+	return true;
 }
 
 void FBYGYouTrackFillerEditorModule::RegisterMenus()
@@ -123,21 +129,26 @@ void FBYGYouTrackFillerEditorModule::RegisterMenus()
 	// Owner will be used for cleanup in call to UToolMenus::UnregisterOwner
 	FToolMenuOwnerScoped OwnerScoped(this);
 
+	FLevelEditorModule& LevelEditorModule = FModuleManager::Get().LoadModuleChecked<FLevelEditorModule>("LevelEditor");
+	TSharedRef<FUICommandList> CommandList = LevelEditorModule.GetGlobalLevelEditorActions();
+	
 	{
 		UToolMenu* Menu = UToolMenus::Get()->ExtendMenu("LevelEditor.MainMenu.Window");
 		{
 			FToolMenuSection& Section = Menu->FindOrAddSection("WindowLayout");
-			Section.AddMenuEntryWithCommandList(FBYGYouTrackFillerButtonCommands::Get().PluginAction, PluginCommands);
+			Section.AddMenuEntryWithCommandList(FBYGYouTrackFillerCommands::Get().FillAndShowYouTrack, CommandList);
 		}
 	}
 
+	const UBYGYouTrackFillerSettings& Settings = *GetDefault<UBYGYouTrackFillerSettings>();
+	if (Settings.bShowEditorButton)
 	{
 		UToolMenu* ToolbarMenu = UToolMenus::Get()->ExtendMenu("LevelEditor.LevelEditorToolBar.PlayToolBar");
 		{
 			FToolMenuSection& Section = ToolbarMenu->FindOrAddSection("PluginTools");
 			{
-				FToolMenuEntry& Entry = Section.AddEntry(FToolMenuEntry::InitToolBarButton(FBYGYouTrackFillerButtonCommands::Get().PluginAction));
-				Entry.SetCommandList(PluginCommands);
+				FToolMenuEntry& Entry = Section.AddEntry(FToolMenuEntry::InitToolBarButton(FBYGYouTrackFillerCommands::Get().FillAndShowYouTrack));
+				Entry.SetCommandList(CommandList);
 			}
 		}
 	}

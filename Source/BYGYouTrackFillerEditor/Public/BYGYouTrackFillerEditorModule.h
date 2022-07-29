@@ -14,14 +14,11 @@ public:
 	virtual void ShutdownModule() override;
 	
 	/** This function will be bound to Command. */
-	void PluginButtonClicked();
+	void HandlePluginButtonExecute();
+	bool HandlerPluginButtonCanExecute();
 	
-private:
+protected:
 	bool HandleSettingsSaved();
 
 	void RegisterMenus();
-
-
-private:
-	TSharedPtr<class FUICommandList> PluginCommands;
 };
