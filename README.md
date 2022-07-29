@@ -1,14 +1,19 @@
 # BYG YouTrack Filler
 
-Simplifies submitting tickets to YouTrack by pre-filling information and opening relevant directories on the user's PC so they can drag and drop log files and screenshots.
+Simplifies submitting tickets to YouTrack by:
+* Pre-filling game and PC information (e.g. current map, build number, PC specs).
+* Opening log and screenshot directories on the user's PC so they can drag and drop log files and screenshots.
 
+## Features
+
+* Works in-editor and non-shipping builds.
+* Supports default ticket template and text replacements to fill out useful info.
+* Supports YouTrack custom properties (e.g. Priority, Severity).
+* Supports Blueprints and C++.
+* Can activate from cheat console with `youtrack`.
+* Does not submit tickets, only pre-fills data. So no half-filled
 * Does not require or store authentication information. All operations are local to the user's computer.
-* Works in editor and non-shipping builds.
-* Set a default issue template and use text replacements to fill out useful info.
-* Supports custom fields in your private YouTrack e.g. Priority.
-* Does not submit tickets, only pre-fills data.
-* Can use either Blueprints or C++.
-* YouTrack information automatically stripped from Shipping builds.
+* YouTrack `.ini` information automatically stripped from Shipping builds.
 
 ## Usage
 
@@ -86,7 +91,7 @@ this new class as the default.
 
 Tested with Unreal 5.0 and 4.25.
 
-## Useful Debug Info Functions
+## Useful functions for attaching info
 
 ```c++
 const FString CPUBrand = FWindowsPlatformMisc::GetCPUBrand();
@@ -96,3 +101,10 @@ const FString GPUBrand = FWindowsPlatformMisc::GetPrimaryGPUBrand();
 FDisplayMetrics Display;
 FDisplayMetrics::RebuildDisplayMetrics( Display );
 ```
+
+## Future Work
+
+* Instead of opening a bunch of directories, could instead copy all useful files to a single temp directory to make it
+  easier for users to know which files are relevant. Would also make it easier for them to select all and attach to the
+  ticket.
+* Support other bug trackers, if they allow the same HTTP-get parameters thing.
