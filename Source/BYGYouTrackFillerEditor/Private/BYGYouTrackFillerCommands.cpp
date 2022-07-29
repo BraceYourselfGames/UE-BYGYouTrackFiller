@@ -14,7 +14,7 @@ void FBYGYouTrackFillerCommands::RegisterCommands()
 	{
 		InputChord = Settings->EditorKeyboardShortcut;
 	}
-	UI_COMMAND(FillAndShowYouTrack, "Open YouTrack", "Open YouTrack with prefilled values.", EUserInterfaceActionType::Button, InputChord);
+	UI_COMMAND(FillAndShowYouTrack, "YouTrack", "Open YouTrack with prefilled values.", EUserInterfaceActionType::Button, InputChord);
 }
 
 #undef LOCTEXT_NAMESPACE

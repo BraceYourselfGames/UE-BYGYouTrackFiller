@@ -82,7 +82,17 @@ Perforce Checklist: 82582
 Customizing other behavior is supported by subclassing `UBYGYouTrackFiller` and changing the Plugin settings to use
 this new class as the default.
 
+## Versions
 
-## Caveats
+Tested with Unreal 5.0 and 4.25.
 
-Unreal 5.0 only 
+## Useful Debug Info Functions
+
+```c++
+const FString CPUBrand = FWindowsPlatformMisc::GetCPUBrand();
+const FString GPUBrand = FWindowsPlatformMisc::GetPrimaryGPUBrand();
+
+// Monitor info
+FDisplayMetrics Display;
+FDisplayMetrics::RebuildDisplayMetrics( Display );
+```

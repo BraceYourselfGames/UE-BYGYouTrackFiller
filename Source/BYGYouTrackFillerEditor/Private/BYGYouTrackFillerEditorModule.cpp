@@ -64,10 +64,14 @@ void FBYGYouTrackFillerEditorModule::StartupModule()
 		if (!PackagingSettings->IniSectionBlacklist.Contains(Section))
 		{
 			PackagingSettings->IniSectionBlacklist.Add(Section);
+#if ENGINE_MAJOR_VERSION >= 5
 			if (!PackagingSettings->TryUpdateDefaultConfigFile())
 			{
 				UE_LOG(LogBYGYouTrackFiller, Warning, TEXT("Failed to update config file to add '%s' to IniSectionBlacklist"), *Section);
 			}
+#else
+			PackagingSettings->UpdateDefaultConfigFile();
+#endif
 		}
 	}
 }
@@ -143,9 +147,13 @@ void FBYGYouTrackFillerEditorModule::RegisterMenus()
 	const UBYGYouTrackFillerSettings& Settings = *GetDefault<UBYGYouTrackFillerSettings>();
 	if (Settings.bShowEditorButton)
 	{
+#if ENGINE_MAJOR_VERSION >= 5
 		UToolMenu* ToolbarMenu = UToolMenus::Get()->ExtendMenu("LevelEditor.LevelEditorToolBar.PlayToolBar");
+#else
+		UToolMenu* ToolbarMenu = UToolMenus::Get()->ExtendMenu("LevelEditor.LevelEditorToolBar");
+#endif
 		{
-			FToolMenuSection& Section = ToolbarMenu->FindOrAddSection("PluginTools");
+			FToolMenuSection& Section = ToolbarMenu->FindOrAddSection("Settings");
 			{
 				FToolMenuEntry& Entry = Section.AddEntry(FToolMenuEntry::InitToolBarButton(FBYGYouTrackFillerCommands::Get().FillAndShowYouTrack));
 				Entry.SetCommandList(CommandList);

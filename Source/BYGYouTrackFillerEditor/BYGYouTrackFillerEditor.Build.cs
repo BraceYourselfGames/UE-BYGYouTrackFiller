@@ -25,9 +25,14 @@ public class BYGYouTrackFillerEditor : ModuleRules
 				"InputCore",
 				"Projects",
 				"ToolMenus",
-				"BYGYouTrackFiller",
-				"DeveloperToolSettings",
+				"BYGYouTrackFiller"
 			}
 		);
+
+#if UE_5_0_OR_LATER
+		PrivateDependencyModuleNames.Add("DeveloperToolSettings");
+#else
+		PrivateDependencyModuleNames.Add("UnrealEd");
+#endif
 	}
 }
