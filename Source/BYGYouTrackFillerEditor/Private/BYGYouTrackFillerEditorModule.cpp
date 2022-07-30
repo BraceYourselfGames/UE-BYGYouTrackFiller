@@ -2,7 +2,6 @@
 
 #include "BYGYouTrackFillerEditorModule.h"
 
-#include "BYGYouTrackFiller.h"
 #include "BYGYouTrackFillerSettings.h"
 #include "ISettingsModule.h"
 #include "ISettingsSection.h"

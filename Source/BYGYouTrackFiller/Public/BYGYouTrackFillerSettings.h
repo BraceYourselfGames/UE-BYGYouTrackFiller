@@ -1,48 +1,16 @@
+// Copyright Brace Yourself Games. All Rights Reserved.
+
 #pragma once
 
+#include "CoreMinimal.h"
+#include "UObject/Object.h"
+#include "Templates/SubclassOf.h"
+#include "Framework/Commands/InputChord.h"
+#include "BYGYouTrackFiller.h"
+#include "BYGYouTrackTicketData.h"
 #include "BYGYouTrackFillerSettings.generated.h"
 
 BYGYOUTRACKFILLER_API DECLARE_LOG_CATEGORY_EXTERN(LogBYGYouTrackFiller, Log, All);
-
-USTRUCT(BlueprintType)
-struct FBYGYouTrackTicketData
-{
-	GENERATED_BODY()
-public:
-	UPROPERTY(config, EditAnywhere, BlueprintReadWrite, meta=(InlineEditConditionToggle, PinHiddenByDefault))
-	bool bIncludeProject = false;
-	// If Project is left blank, the draft ticket should be created for the user's default project
-	UPROPERTY(config, EditAnywhere, BlueprintReadWrite, meta=(EditCondition="bIncludeProject"))
-	FString Project;
-
-	UPROPERTY(config, EditAnywhere, BlueprintReadWrite, meta=(InlineEditConditionToggle, PinHiddenByDefault))
-	bool bIncludeSummary = false;
-	// The short title of the ticket 
-	UPROPERTY(config, EditAnywhere, BlueprintReadWrite, meta=(EditCondition="bIncludeSummary"))
-	FString Summary;
-
-	UPROPERTY(config, EditAnywhere, BlueprintReadWrite, meta=(InlineEditConditionToggle, PinHiddenByDefault))
-	bool bIncludeDescription = false;
-	// The long text explaining the bug or issue. Can contain text replacement entries like {Version},
-	// see TextReplacements for more info.
-	UPROPERTY(config, EditAnywhere, BlueprintReadWrite, meta=(EditCondition="bIncludeDescription", MultiLine=true))
-	FString Description;
-
-	// Per-project custom fields, e.g. "Assignee", "Priority"
-	UPROPERTY(config, EditAnywhere, BlueprintReadWrite)
-	TMap<FString, FString> CustomFields;
-	
-	// Replace instances of {Key} in Summary/Description with these values
-	// e.g. Your template Description could have "Version: {Version}", and you add an entry to TextReplacements
-	// TextReplacements.Add("Version", "4.2 alpha");
-	UPROPERTY(BlueprintReadWrite)
-	TMap<FString, FString> TextReplacements;
-
-	bool IsValid() const
-	{
-		return !Summary.IsEmpty();
-	}
-};
 
 UCLASS(config = "BYGYouTrackFiller", defaultconfig)
 class BYGYOUTRACKFILLER_API UBYGYouTrackFillerSettings : public UObject
@@ -94,7 +62,7 @@ public:
 
 	// This class is used when clicking on the button in the editor. If you subclass it then change it to point to your subclass
 	UPROPERTY(config, EditAnywhere, Category = "Advanced")
-	TSubclassOf<class UBYGYouTrackFiller> DefaultFillerClass;
+	TSubclassOf<UBYGYouTrackFiller> DefaultFillerClass;
 
 	// It is very likely that you do not want your YouTrack server data to appear in ini files
 	// with your shipping game. Checking this will make sure that it is stripped from shipping builds.

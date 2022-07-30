@@ -1,6 +1,6 @@
-#include "BYGYouTrackFillerSettings.h"
+// Copyright Brace Yourself Games. All Rights Reserved.
 
-#include "BYGYouTrackFiller.h"
+#include "BYGYouTrackFillerSettings.h"
 
 DEFINE_LOG_CATEGORY(LogBYGYouTrackFiller);
 

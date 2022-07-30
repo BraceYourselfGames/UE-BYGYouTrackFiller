@@ -3,10 +3,10 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "BYGYouTrackFillerSettings.h"
+#include "UObject/Object.h"
+#include "BYGYouTrackTicketData.h"
 #include "BYGYouTrackFiller.generated.h"
 
-// Subclass me to customize behaviour
 UCLASS()
 class BYGYOUTRACKFILLER_API UBYGYouTrackFiller : public UObject
 {

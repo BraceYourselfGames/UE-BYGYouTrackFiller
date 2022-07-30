@@ -87,9 +87,13 @@ Perforce Checklist: 82582
 Customizing other behavior is supported by subclassing `UBYGYouTrackFiller` and changing the Plugin settings to use
 this new class as the default.
 
-## Versions
+## Compatability
 
-Tested with Unreal 5.0 and 4.25.
+Compiled with Unreal Engine versions 4.25, 4.27, and 5.0. Tested with Unreal Engine versions 4.25, and 5.0.
+
+Tested on Windows 10, not tested on Linux or Mac. Uses `FPlatformMisc::OsExecute(TEXT("open"), *URL, TEXT(""))` to open
+a browser to view YouTrack and local files.
+
 
 ## Useful functions for attaching info
 
