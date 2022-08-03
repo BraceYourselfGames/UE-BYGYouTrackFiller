@@ -63,14 +63,7 @@ void FBYGYouTrackFillerEditorModule::StartupModule()
 		if (!PackagingSettings->IniSectionBlacklist.Contains(Section))
 		{
 			PackagingSettings->IniSectionBlacklist.Add(Section);
-#if ENGINE_MAJOR_VERSION >= 5
-			if (!PackagingSettings->TryUpdateDefaultConfigFile())
-			{
-				UE_LOG(LogBYGYouTrackFiller, Warning, TEXT("Failed to update config file to add '%s' to IniSectionBlacklist"), *Section);
-			}
-#else
 			PackagingSettings->UpdateDefaultConfigFile();
-#endif
 		}
 	}
 }
