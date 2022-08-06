@@ -19,15 +19,13 @@ Simplifies submitting tickets to YouTrack by:
 
 ### Installation
 
-1. Clone the repository from git. 
-2. Copy the `UE-BYGYouTrackFiller` directory and paste it in your Project/Plugins folder.
-3. Rename the folder `BYGYouTrackFiller` and delete any hidden `.git` files within
-4. Rebuild the project and open the editor
-5. Configure the settings in Edit -> Project Settings -> Plugins -> BYG YouTrackFiller
-6. Set the proper `YouTrack Base Url` and `Project` values (Project needs ticket ID, e.g. RAM)
-7. Update the `Description` as needed. Consider using QA's standard template. 
-8. Set any `Custom Fields` by key / value pair.
-9. Optionally set up a hotkey, enable screenshots, and more.
+1. Clone/download the repository to somewhere inside your `Project/Plugins` folder.
+2. Rebuild the project and open the editor
+3. Configure the settings in **Edit > Project Settings > Plugins > BYG YouTrackFiller**
+4. Set the proper `YouTrack Base Url` and `Project` values (Project needs ticket ID, e.g. RAM)
+5. Update the `Description` as needed. Consider using your QA's standard template. 
+6. Set any `Custom Fields` by key / value pair.
+7. Optionally set up a hotkey, enable screenshots, and more.
 
 ### In-Editor
 
